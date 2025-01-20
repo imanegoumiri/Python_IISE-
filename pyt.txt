@@ -1,0 +1,97 @@
+
+# Exercice 4 : Exceptions Personnalisées
+class NegativeAgeError(Exception):
+    pass
+
+def set_age(age):
+    if age < 0:
+        raise NegativeAgeError("Erreur : L'âge ne peut pas être négatif.")
+    print(f"L'âge est : {age}")
+
+# Exercice 5 : Multi-Exceptions
+def process_input(user_input):
+    try:
+        value = int(user_input)
+        result = 10 / value
+        print(f"Résultat : {result}")
+    except ValueError:
+        print("Erreur : Entrée invalide. Veuillez fournir un entier.")
+    except ZeroDivisionError:
+        print("Erreur : Division par zéro interdite.")
+
+# Exercice 6 : Utilisation de `else` et `finally`
+def safe_division_with_else_finally(a, b):
+    try:
+        result = a / b
+    except ZeroDivisionError:
+        raise ZeroDivisionError("Erreur : Division par zéro.")
+    else:
+        print("Division effectuée avec succès.")
+        return result
+    finally:
+        print("Fin de la fonction.")
+
+# Exercice 7 : Journalisation des Exceptions
+import logging
+logging.basicConfig(filename='error.log', level=logging.ERROR, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+def log_error(message):
+    logging.error(message)
+
+# Modifié pour inclure log_error dans Exercice 3
+
+# Exercice 8 : Tests Unitaires pour les Exceptions
+import unittest
+
+class TestExceptionHandling(unittest.TestCase):
+
+    def test_safe_division(self):
+        self.assertEqual(safe_division(10, 2), 5)
+        with self.assertRaises(ZeroDivisionError):
+            safe_division(10, 0)
+
+    def test_convert_to_int(self):
+        self.assertEqual(convert_to_int("42"), 42)
+        with self.assertRaises(ValueError):
+            convert_to_int("abc")
+
+    def test_read_file(self):
+        with self.assertRaises(FileNotFoundError):
+            read_file("nonexistent.txt")
+
+    def test_set_age(self):
+        with self.assertRaises(NegativeAgeError):
+            set_age(-5)
+
+# Exercice 9 : Gestion des Exceptions dans les Boucles
+def get_positive_integer():
+    while True:
+        try:
+            value = int(input("Veuillez entrer un entier positif : "))
+            if value <= 0:
+                print("Erreur : L'entier doit être positif.")
+            else:
+                return value
+        except ValueError:
+            print("Erreur : Entrée invalide. Veuillez fournir un entier.")
+
+# Exercice 10 : Combinez Tout
+def main():
+    try:
+        filename = input("Entrez le nom du fichier : ")
+        content = read_file(filename)
+        if content:
+            print(content)
+
+        number = get_positive_integer()
+        print(f"Vous avez saisi le nombre positif : {number}")
+    except Exception as e:
+        print(f"Une erreur inattendue s'est produite : {e}")
+
+if __name__ == "__main__":
+    main()
+
+# Pour exécuter les tests unitaires
+if __name__ == "__main__":
+    unittest.main()
